@@ -1,4 +1,4 @@
-﻿@model ProductViewModel
+@model ProductViewModel
 @{
     ViewData["Title"] = "Product Page";
 }
@@ -112,9 +112,10 @@
                                             </a>
 
                                             <!-- Details -->
-                                                  <a asp-action="Details"
+                                            <a asp-action="Details"
                                                asp-route-id="@product.ProductId"
                                                data-details="Product details"
+                                               data-details-size="xl"
                                                class="btn btn-sm btn-info">
                                                 Details
                                             </a>

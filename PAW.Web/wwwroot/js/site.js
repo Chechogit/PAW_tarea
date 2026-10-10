@@ -1,4 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
@@ -32,6 +32,11 @@ document.addEventListener("click", async function (event) {
     const modalElement = document.getElementById("detailsModal");
     const title = document.getElementById("detailsModalLabel");
     const body = document.getElementById("detailsModalBody");
+
+    // Tamaño del modal: data-details-size="xl" (o "lg") en el link; si no viene, tamaño normal
+    const dialog = document.getElementById("detailsModalDialog");
+    dialog.className = "modal-dialog modal-dialog-scrollable";
+    if (link.dataset.detailsSize) dialog.classList.add("modal-" + link.dataset.detailsSize);
 
     title.textContent = link.dataset.details || "Details";
     body.innerHTML = '<div class="text-center py-5"><div class="spinner-border" role="status"></div></div>';

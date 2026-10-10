@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PAW.DataAccess.MSSQL;
 using PAW.Models;
 
@@ -157,7 +157,15 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         try
         {
-            return await DbSet.FindAsync(id);
+            var entity = await DbSet.FindAsync(id);
+
+            // Find deja la entidad "vigilada" (tracked) por EF. La soltamos para que,
+            // si después se guarda otra copia con el mismo Id (Update), EF no se queje de
+            // "another instance with the same key is already being tracked".
+            if (entity is not null)
+                DbContext.Entry(entity).State = EntityState.Detached;
+
+            return entity;
         }
         catch (Exception ex)
         {
