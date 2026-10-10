@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PAW.Models;
 
-public partial class Task
+public partial class PawTask
 {
     public int Id { get; set; }
 

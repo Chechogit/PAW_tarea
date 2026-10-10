@@ -5,7 +5,7 @@ namespace PAW.Models;
 
 public partial class UserRole
 {
-    public decimal? Id { get; set; }
+    public decimal Id { get; set; }
 
     public decimal? RoldId { get; set; }
 
