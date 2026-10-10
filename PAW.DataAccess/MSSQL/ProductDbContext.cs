@@ -1,22 +1,29 @@
-﻿namespace PAW.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW.Models;
+//using PawTask = PAW.Models.PawTask;
 
-public partial class PawTask
+namespace PAW.DataAccess.MSSQL; 
+
+public partial class ProductDbContext : DbContext
 {
     public ProductDbContext()
     {
     }
 
-    public string? Name { get; set; }
+    public ProductDbContext(DbContextOptions<ProductDbContext> options)
+        : base(options)
+    {
+    }
 
-    public string? Description { get; set; }
+    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
-    public string? Status { get; set; }
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
-    public DateTime? DueDate { get; set; }
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
-    public DateTime? LastModified { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Component> Components { get; set; }
 
@@ -103,7 +110,7 @@ public partial class PawTask
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A2B9814EB46");
+            entity.HasKey(e => e.CategoryId).HasName("PK_Categori_19093A2B9814EB46");
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(255);
@@ -128,7 +135,7 @@ public partial class PawTask
 
         modelBuilder.Entity<Inventory>(entity =>
         {
-            entity.HasKey(e => e.InventoryId).HasName("PK__Inventor__F5FDE6D39947992D");
+            entity.HasKey(e => e.InventoryId).HasName("PK_Inventor_F5FDE6D39947992D");
 
             entity.ToTable("Inventory");
 
@@ -152,7 +159,7 @@ public partial class PawTask
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Notifica__3213E83FDBBA18F8");
+            entity.HasKey(e => e.Id).HasName("PK_Notifica_3213E83FDBBA18F8");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
@@ -170,7 +177,7 @@ public partial class PawTask
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6ED8EEF2B34");
+            entity.HasKey(e => e.ProductId).HasName("PK_Products_B40CC6ED8EEF2B34");
 
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -185,20 +192,20 @@ public partial class PawTask
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Products__Catego__59063A47");
+                .HasConstraintName("FK_ProductsCatego_59063A47");
 
             entity.HasOne(d => d.Inventory).WithMany(p => p.Products)
                 .HasForeignKey(d => d.InventoryId)
-                .HasConstraintName("FK__Products__Invent__59FA5E80");
+                .HasConstraintName("FK_ProductsInvent_59FA5E80");
 
             entity.HasOne(d => d.Supplier).WithMany(p => p.Products)
                 .HasForeignKey(d => d.SupplierId)
-                .HasConstraintName("FK__Products__Suppli__5AEE82B9");
+                .HasConstraintName("FK_ProductsSuppli_5AEE82B9");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Roles__8AFACE3AA5D18E57");
+            entity.HasKey(e => e.RoleId).HasName("PK_Roles_8AFACE3AA5D18E57");
 
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.RoleName).HasMaxLength(255);
@@ -206,7 +213,7 @@ public partial class PawTask
 
         modelBuilder.Entity<Supplier>(entity =>
         {
-            entity.HasKey(e => e.SupplierId).HasName("PK__Supplier__4BE66694C1B520FD");
+            entity.HasKey(e => e.SupplierId).HasName("PK_Supplier_4BE66694C1B520FD");
 
             entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
             entity.Property(e => e.Address).HasMaxLength(1000);
@@ -223,8 +230,8 @@ public partial class PawTask
         modelBuilder.Entity<PawTask>(entity =>
         {
             entity.ToTable("Tasks");
-            entity.HasKey(e => e.Id).HasName("PK__Tasks__3214EC07FEFEEFF5");
-                
+            entity.HasKey(e => e.Id).HasName("PK_Tasks_3214EC07FEFEEFF5");
+
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.DueDate).HasColumnType("datetime");
@@ -236,7 +243,7 @@ public partial class PawTask
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC6CC156E1");
+            entity.HasKey(e => e.UserId).HasName("PK_Users_1788CCAC6CC156E1");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");

@@ -21,7 +21,6 @@ namespace PAW.Web.Controllers
             _logger = logger;
         }
 
-        // GET: /Product
         public async Task<IActionResult> Index()
         {
             var viewModel = new ProductViewModel
@@ -30,46 +29,6 @@ namespace PAW.Web.Controllers
                 TipoCambio = base.TipoCambio
             };
             return View(viewModel);
-        }
-
-        // GET: /Product/Create  -> muestra el formulario vacío
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new ProductDTO());
-        }
-
-        // POST: /Product/Create  -> recibe el formulario
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] ProductDTO product)
-        {
-            if (!ModelState.IsValid)
-                return View(product);
-
-            try
-            {
-                var created = await _productService.CreateProductAsync(product);
-                TempData["Success"] = $"Product \"{created.Name}\" was created.";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (ApplicationException ex)
-            {
-                _logger.LogError(ex, "Error creating product");
-                ModelState.AddModelError(string.Empty, GetApiMessage(ex));
-                return View(product);
-            }
-        }
-
-        // GET: /Product/Edit/5  -> muestra el formulario con los datos actuales
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var product = await _productService.GetProductAsync(id);
-            if (product is null)
-                return NotFound();
-
-            return View(product);
         }
 
         [HttpGet]
