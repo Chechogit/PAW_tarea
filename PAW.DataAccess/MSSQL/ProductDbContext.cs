@@ -1,22 +1,29 @@
-﻿namespace PAW.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PAW.Models;
+//using PawTask = PAW.Models.PawTask;
 
-public partial class PawTask
+namespace PAW.DataAccess.MSSQL;
+
+public partial class ProductDbContext : DbContext
 {
     public ProductDbContext()
     {
     }
 
-    public string? Name { get; set; }
+    public ProductDbContext(DbContextOptions<ProductDbContext> options)
+        : base(options)
+    {
+    }
 
-    public string? Description { get; set; }
+    public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
-    public string? Status { get; set; }
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
-    public DateTime? DueDate { get; set; }
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
-    public DateTime? LastModified { get; set; }
+    public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Component> Components { get; set; }
 
@@ -224,7 +231,7 @@ public partial class PawTask
         {
             entity.ToTable("Tasks");
             entity.HasKey(e => e.Id).HasName("PK__Tasks__3214EC07FEFEEFF5");
-                
+
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(1000);
             entity.Property(e => e.DueDate).HasColumnType("datetime");
