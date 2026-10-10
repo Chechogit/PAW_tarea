@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PAW.Models;
-using PawTask = PAW.Models.Task;
+//using PawTask = PAW.Models.PawTask;
 
 namespace PAW.DataAccess.MSSQL;
 
@@ -39,17 +39,13 @@ public partial class ProductDbContext : DbContext
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
-    public virtual DbSet<PawTask> Tasks { get; set; }
+    public virtual DbSet<PawTask> PawTasks { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserAction> UserActions { get; set; }
 
     public virtual DbSet<UserRole> UserRoles { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=ProductDB;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -233,6 +229,7 @@ public partial class ProductDbContext : DbContext
 
         modelBuilder.Entity<PawTask>(entity =>
         {
+            entity.ToTable("Tasks");
             entity.HasKey(e => e.Id).HasName("PK__Tasks__3214EC07FEFEEFF5");
 
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
@@ -261,12 +258,14 @@ public partial class ProductDbContext : DbContext
 
         modelBuilder.Entity<UserAction>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id).HasName("PK_UserActions");
 
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("numeric(18, 0)");
             entity.Property(e => e.Description)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -274,9 +273,11 @@ public partial class ProductDbContext : DbContext
 
         modelBuilder.Entity<UserRole>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id).HasName("PK_UserRoles");
 
-            entity.Property(e => e.Id).HasColumnType("numeric(18, 0)");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnType("numeric(18, 0)");
             entity.Property(e => e.RoldId)
                 .HasColumnType("numeric(18, 0)")
                 .HasColumnName("RoldID");

@@ -1,3 +1,5 @@
+
+using Microsoft.EntityFrameworkCore;
 using PAW.DataAccess.MSSQL;
 using PAW.DataAccess.Repositories;
 
@@ -11,7 +13,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddDbContext<ProductDbContext>();
+builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDB")));
 
 var app = builder.Build();
 

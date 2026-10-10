@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace PAW.Models;
 
-namespace PAW.Models;
-
-public partial class Task
+public partial class PawTask
 {
     public int Id { get; set; }
 

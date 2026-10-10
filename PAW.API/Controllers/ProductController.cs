@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW.DataAccess.Repositories;
-using PAW.Models;
 using PAW.Models.DTO;
 
 namespace PAW.API.Controllers
@@ -12,7 +11,7 @@ namespace PAW.API.Controllers
         [HttpGet(Name = "GetProducts")]
         public async Task<IEnumerable<ProductDTO>> GetAll()
         {
-            var products = await productRepository.ReadAsync() ?? [];
+            var products = await productRepository.ReadAsync();
             return products.Select(ProductDTO.ConvertFrom);
         }
 
@@ -20,40 +19,78 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<ProductDTO>> GetById(int id)
         {
             var product = await productRepository.FindAsync(id);
+            if (product is null)
+                return NotFound();
+
             return ProductDTO.ConvertFrom(product);
         }
 
-        /*[HttpPost("filter", Name = "FilterProducts")]
-        public async Task<IEnumerable<Product>> Filter(ConditionViewModel condition)
-        {
-            var predicate = ConditionResolver<Product>.ResolveCondition(condition.Criteria, condition.Property, condition.Value, condition.Start, condition.End);
-            var results = await businessProduct.Filter(predicate);
-            return results;
-        }*/
-
         [HttpPost]
-        public async Task<bool> Save([FromBody] IEnumerable<Product> Products)
+        public async Task<ActionResult<ProductDTO>> Create([FromBody] ProductDTO productDTO)
         {
-            foreach (var p in Products)
+            var product = ProductDTO.ConvertTo(productDTO);
+            product.ProductId = 0;
+            product.LastModified = DateTime.Now;
+
+            try
             {
-                if (p.ProductId > 0)
-                    await productRepository.CreateAsync(p);
-                else await productRepository.UpdateAsync(p);
+                await productRepository.CreateAsync(product);
+            }
+            catch (PAWException ex)
+            {
+                logger.LogError(ex, "Error al crear el producto");
+                return BadRequest("No se pudo crear el producto. Verifique que la categoría, el inventario y el proveedor existan.");
             }
 
-            /*Products.ToList().ForEach(async x =>
-            {
-                if (x.Id > 0)
-                    await productRepository.CreateAsync(x);
-                else await productRepository.UpdateAsync(x);
-            });*/
-            return true;
+            return CreatedAtRoute("GetProductById", new { id = product.ProductId }, ProductDTO.ConvertFrom(product));
         }
 
-        [HttpDelete]
-        public async Task<bool> Delete(Product Product)
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] ProductDTO productDTO)
         {
-            return await productRepository.DeleteAsync(Product);
+            if (id != productDTO.ProductId)
+                return BadRequest("El Id de la URL no coincide con el del producto.");
+
+            var existing = await productRepository.FindAsync(id);
+            if (existing is null)
+                return NotFound();
+
+            var product = ProductDTO.ConvertTo(productDTO);
+            product.CreatedBy = existing.CreatedBy;
+            product.LastModified = DateTime.Now;
+
+            try
+            {
+                await productRepository.UpdateAsync(product);
+            }
+            catch (PAWException ex)
+            {
+                logger.LogError(ex, "Error al actualizar el producto {Id}", id);
+                return BadRequest("No se pudo actualizar el producto. Verifique que la categoría, el inventario y el proveedor existan.");
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await productRepository.FindAsync(id);
+            if (product is null)
+                return NotFound();
+
+            try
+            {
+                await productRepository.DeleteAsync(product);
+            }
+            catch (PAWException ex)
+            {
+                logger.LogError(ex, "Error al eliminar el producto {Id}", id);
+                return BadRequest("No se pudo eliminar el producto.");
+            }
+
+            return NoContent();
         }
     }
 }
