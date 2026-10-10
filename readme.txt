@@ -1,4 +1,4 @@
-URL del repositorio: https://github.com/Chechogit/PAW
+URL del repositorio: https://github.com/Chechogit/PAW_task
 
 Integrantes
 	Sergio Montero Mora
