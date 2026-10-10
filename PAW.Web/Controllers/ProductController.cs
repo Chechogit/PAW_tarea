@@ -1,7 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PAW.Models.DTO;
 using PAW.Web.Models;
 using PAW.Web.Services;
+using System.Diagnostics;
 
 namespace PAW.Web.Controllers
 {
@@ -11,8 +12,8 @@ namespace PAW.Web.Controllers
         private readonly ILogger<ProductController> _logger;
 
         public ProductController(
-            IProductService productService, 
-            IExchangeRateService exchangeRateService, 
+            IProductService productService,
+            IExchangeRateService exchangeRateService,
             ILogger<ProductController> logger)
             : base(exchangeRateService)
         {
@@ -26,8 +27,66 @@ namespace PAW.Web.Controllers
             {
                 Products = await _productService.GetProductsAsync(),
                 TipoCambio = base.TipoCambio
-            };  
+            };
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new ProductDTO());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromForm] ProductDTO product)
+        {
+            if (!ModelState.IsValid)
+                return View(product);
+
+            try
+            {
+                var created = await _productService.CreateProductAsync(product);
+                TempData["Success"] = $"Product \"{created.Name}\" was created.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogError(ex, "Error creating product");
+                ModelState.AddModelError(string.Empty, GetApiMessage(ex));
+                return View(product);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([FromForm] ProductDTO product)
+        {
+            if (!ModelState.IsValid)
+                return View(product);
+
+            try
+            {
+                await _productService.UpdateProductAsync(product);
+                TempData["Success"] = $"Product \"{product.Name}\" was updated.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogError(ex, "Error updating product {Id}", product.ProductId);
+                ModelState.AddModelError(string.Empty, GetApiMessage(ex));
+                return View(product);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -35,5 +94,7 @@ namespace PAW.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        private static string GetApiMessage(ApplicationException ex)
+            => ex.InnerException?.Message ?? ex.Message;
     }
 }

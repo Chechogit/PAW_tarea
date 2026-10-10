@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PAW.Models.DTO;
 
@@ -11,27 +12,38 @@ public class ProductDTO
     public int ProductId { get; set; }
 
     [JsonPropertyName("name")]
+    [Required(ErrorMessage = "The name is required.")]
+    [StringLength(255)]
     public string? Name { get; set; }
 
     [JsonPropertyName("description")]
+    [StringLength(1000)]
     public string? Description { get; set; }
 
     [JsonPropertyName("rating")]
+    [Range(0, 5, ErrorMessage = "The rating must be between 0 and 5.")]
     public decimal? Rating { get; set; }
 
     [JsonPropertyName("categoryId")]
+    [Display(Name = "Category ID")]
     public int? CategoryId { get; set; }
 
     [JsonPropertyName("inventoryId")]
+    [Display(Name = "Inventory ID")]
     public int? InventoryId { get; set; }
 
     [JsonPropertyName("supplierId")]
+    [Display(Name = "Supplier ID")]
     public int? SupplierId { get; set; }
 
     [JsonPropertyName("modifiedBy")]
+    [Display(Name = "Modified By")]
+    [StringLength(255)]
     public string? ModifiedBy { get; set; }
 
     [JsonPropertyName("createdBy")]
+    [Display(Name = "Created By")]
+    [StringLength(100)]
     public string? CreatedBy { get; set; }
 
     [JsonPropertyName("comments")]

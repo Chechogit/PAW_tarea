@@ -1,0 +1,32 @@
+﻿@model PAW.Models.DTO.ProductDTO
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Edit Product <small class="text-muted">#@Model.ProductId</small></h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" asp-route-id="@Model.ProductId" method="post">
+
+                @* El Id viaja oculto: el usuario no lo edita, pero el controller lo necesita *@
+                <input type="hidden" asp-for="ProductId" />
+
+                <partial name="_ProductForm" model="Model" />
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-warning">Save changes</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
