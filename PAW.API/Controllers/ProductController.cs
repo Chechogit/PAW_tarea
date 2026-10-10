@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PAW.DataAccess.Repositories;
+using PAW.Models;
 using PAW.Models.DTO;
 
 namespace PAW.API.Controllers
@@ -9,10 +10,12 @@ namespace PAW.API.Controllers
     public class ProductController(ILogger<ProductController> logger, IProductRepository productRepository) : ControllerBase
     {
         [HttpGet(Name = "GetProducts")]
-        public async Task<IEnumerable<ProductDTO>> GetAll()
+        public async Task<PagedResult<ProductDTO>> GetAll(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = Paging.MaxPageSize)
         {
-            var products = await productRepository.ReadAsync();
-            return products.Select(ProductDTO.ConvertFrom);
+            var result = await productRepository.ReadPagedAsync(page, pageSize);
+            return result.Map(ProductDTO.ConvertFrom);
         }
 
         [HttpGet("{id:int}", Name = "GetProductById")]

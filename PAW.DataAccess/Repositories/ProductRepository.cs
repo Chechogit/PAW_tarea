@@ -12,8 +12,7 @@ public interface IProductRepository : IRepositoryBase<Product>
 public class ProductRepository(ProductDbContext context)
     : RepositoryBase<Product>(context), IProductRepository
 {
-
-    private IQueryable<Product> QueryWithRelations()
+    protected override IQueryable<Product> BaseQuery()
     {
         return DbSet
             .AsNoTracking()
@@ -22,24 +21,12 @@ public class ProductRepository(ProductDbContext context)
             .Include(p => p.Supplier);
     }
 
-    public override async Task<IEnumerable<Product>> ReadAsync()
-    {
-        try
-        {
-            return await QueryWithRelations().ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new PAWException(ex);
-        }
-    }
-
     public override async Task<Product?> FindAsync(object id)
     {
         try
         {
             var productId = Convert.ToInt32(id);
-            return await QueryWithRelations()
+            return await BaseQuery()
                 .FirstOrDefaultAsync(p => p.ProductId == productId);
         }
         catch (Exception ex)

@@ -48,9 +48,9 @@
 
                     <tbody>
 
-                        @if (Model.Products != null && Model.Products.Any())
+                         @if (Model.Products.Items.Any())
                         {
-                            foreach (var product in Model.Products)
+                             foreach (var product in Model.Products.Items)
                             {
                                 <tr>
 
@@ -146,6 +146,8 @@
                 </table>
 
             </div>
+
+<partial name="_Pager" model="Model.Products" />
 
         </div>
     </div>

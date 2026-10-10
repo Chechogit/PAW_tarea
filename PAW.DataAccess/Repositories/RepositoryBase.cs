@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PAW.DataAccess.MSSQL;
+using PAW.Models;
 
 namespace PAW.Repositories;
 
@@ -13,6 +14,7 @@ public interface IRepositoryBase<T>
     Task<bool> CreateAsync(T entity);
     Task<bool> DeleteAsync(T entity);
     Task<IEnumerable<T>> ReadAsync();
+    Task<PagedResult<T>> ReadPagedAsync(int page, int pageSize);
 
 
     Task<T?> FindAsync(object id);
@@ -98,11 +100,51 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         }
     }
 
+    protected virtual IQueryable<T> BaseQuery()
+    {
+        return DbSet.AsNoTracking();
+    }
+
+    public virtual async Task<PagedResult<T>> ReadPagedAsync(int page, int pageSize)
+    {
+        try
+        {
+            pageSize = Math.Clamp(pageSize, 1, Paging.MaxPageSize);
+
+            var query = BaseQuery();
+            var totalCount = await query.CountAsync();
+
+            var totalPages = Math.Max(1, (int)Math.Ceiling(totalCount / (double)pageSize));
+            page = Math.Clamp(page, 1, totalPages);
+
+            var keyName = DbContext.Model.FindEntityType(typeof(T))?
+                .FindPrimaryKey()?.Properties[0].Name;
+            if (keyName is not null)
+                query = query.OrderBy(e => EF.Property<object>(e, keyName));
+
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<T>
+            {
+                Items = items,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
+        }
+        catch (Exception ex)
+        {
+            throw new PAWException(ex);
+        }
+    }
     public virtual async Task<IEnumerable<T>> ReadAsync()
     {
         try
         {
-            return await DbSet.ToListAsync();
+            return await BaseQuery().ToListAsync();
         }
         catch (Exception ex)
         {

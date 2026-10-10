@@ -1,6 +1,6 @@
-﻿using System.Net;
-using APW.Architecture;
+﻿using APW.Architecture;
 using PAW.Architecture.Providers;
+using PAW.Models;
 using PAW.Models.DTO;
 using System.Net;
 
@@ -8,7 +8,7 @@ namespace PAW.Web.Services;
 
 public interface IProductService
 {
-    Task<IEnumerable<ProductDTO>> GetProductsAsync();
+    Task<PagedResult<ProductDTO>> GetProductsAsync(int page);
     Task<ProductDTO?> GetProductAsync(int id);
     Task<ProductDTO> CreateProductAsync(ProductDTO product);
     Task UpdateProductAsync(ProductDTO product);
@@ -25,11 +25,11 @@ public class ProductService : ServiceBase, IProductService
         _restProvider = restProvider;
     }
 
-    public async Task<IEnumerable<ProductDTO>> GetProductsAsync()
+    public async Task<PagedResult<ProductDTO>> GetProductsAsync(int page)
     {
-        var response = await _restProvider.GetAsync(SetPathUrl(_path), id: null);
-        var products = await JsonProvider.DeserializeAsync<IEnumerable<ProductDTO>>(response);
-        return products;
+        var url = SetPathUrl($"{_path}?page={page}&pageSize={Paging.MaxPageSize}");
+        var response = await _restProvider.GetAsync(url, id: null);
+        return await JsonProvider.DeserializeAsync<PagedResult<ProductDTO>>(response);
     }
 
     public async Task<ProductDTO?> GetProductAsync(int id)

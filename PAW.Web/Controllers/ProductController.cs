@@ -21,11 +21,11 @@ namespace PAW.Web.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var viewModel = new ProductViewModel
             {
-                Products = await _productService.GetProductsAsync(),
+                Products = await _productService.GetProductsAsync(page),
                 TipoCambio = base.TipoCambio
             };
             return View(viewModel);
