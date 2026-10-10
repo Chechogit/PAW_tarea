@@ -1,0 +1,11 @@
+@model PAW.Models.DTO.RoleDTO
+
+@* Partial reutilizable: detalle de rol.
+   La usan el modal de Details y la pantalla de Delete. *@
+
+<dl class="row mb-0">
+    <dt class="col-5">Role ID</dt>
+    <dd class="col-7">@Model.RoleId</dd>
+    <dt class="col-5">Name</dt>
+    <dd class="col-7">@Model.RoleName</dd>
+</dl>

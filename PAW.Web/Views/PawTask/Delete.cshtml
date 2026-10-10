@@ -1,0 +1,30 @@
+@model PAW.Models.DTO.PawTaskDTO
+@{
+    ViewData["Title"] = "Delete Task";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-3">Delete Task</h2>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+    <div class="alert alert-warning" role="alert">
+        Are you sure you want to delete this record? This action cannot be undone.
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            @* La misma partial que usa el modal de Details *@
+            <partial name="_PawTaskDetails" model="Model" />
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,27 @@
+@model PAW.Models.DTO.UserDTO
+
+@* Partial reutilizable: detalle de usuario.
+   La usan el modal de Details y la pantalla de Delete. *@
+
+<dl class="row mb-0">
+    <dt class="col-5">User ID</dt>
+    <dd class="col-7">@Model.UserId</dd>
+    <dt class="col-5">Username</dt>
+    <dd class="col-7">@Model.Username</dd>
+    <dt class="col-5">Email</dt>
+    <dd class="col-7">@Model.Email</dd>
+    <dt class="col-5">Password Hash</dt>
+    <dd class="col-7">@(string.IsNullOrEmpty(Model.PasswordHash) ? "" : "••••••••")</dd>
+    <dt class="col-5">Role ID</dt>
+    <dd class="col-7">@Model.RoleId</dd>
+    <dt class="col-5">Active</dt>
+    <dd class="col-7">@(Model.IsActive ? "Yes" : "No")</dd>
+    <dt class="col-5">Created At</dt>
+    <dd class="col-7">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</dd>
+    <dt class="col-5">Modified Date</dt>
+    <dd class="col-7">@Model.LastModified?.ToString("yyyy-MM-dd HH:mm")</dd>
+    <dt class="col-5">Modified By</dt>
+    <dd class="col-7">@Model.ModifiedBy</dd>
+    <dt class="col-5">Last Modified By</dt>
+    <dd class="col-7">@Model.LastModifiedBy</dd>
+</dl>

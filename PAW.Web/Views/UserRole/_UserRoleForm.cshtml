@@ -1,0 +1,19 @@
+@model PAW.Models.DTO.UserRoleDTO
+
+@* Campos compartidos por Create y Edit *@
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="RoleId" class="form-label"></label>
+        <input asp-for="RoleId" type="number" step="1" class="form-control" />
+        <span asp-validation-for="RoleId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="UserId" class="form-label"></label>
+        <input asp-for="UserId" type="number" step="1" class="form-control" />
+        <span asp-validation-for="UserId" class="text-danger small"></span>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+@model PAW.Models.DTO.PawTaskDTO
+
+@* Partial reutilizable: detalle de tarea.
+   La usan el modal de Details y la pantalla de Delete. *@
+
+<dl class="row mb-0">
+    <dt class="col-5">ID</dt>
+    <dd class="col-7">@Model.Id</dd>
+    <dt class="col-5">Name</dt>
+    <dd class="col-7">@Model.Name</dd>
+    <dt class="col-5">Description</dt>
+    <dd class="col-7">@Model.Description</dd>
+    <dt class="col-5">Status</dt>
+    <dd class="col-7">@Model.Status</dd>
+    <dt class="col-5">Due Date</dt>
+    <dd class="col-7">@Model.DueDate?.ToString("yyyy-MM-dd HH:mm")</dd>
+    <dt class="col-5">Created At</dt>
+    <dd class="col-7">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</dd>
+    <dt class="col-5">Modified Date</dt>
+    <dd class="col-7">@Model.LastModified?.ToString("yyyy-MM-dd HH:mm")</dd>
+    <dt class="col-5">Modified By</dt>
+    <dd class="col-7">@Model.ModifiedBy</dd>
+</dl>

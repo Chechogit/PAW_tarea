@@ -1,0 +1,86 @@
+@model UserRoleViewModel
+@{
+    ViewData["Title"] = "User Roles";
+}
+
+<div class="container mt-4">
+
+    @await Html.PartialAsync("ExchangeRate", Model.TipoCambio)
+
+    @if (TempData["Success"] is string success)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @success
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>User Roles</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Add User Role
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Role ID</th>
+                            <th>User ID</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.UserRoles.Items.Any())
+                        {
+                            foreach (var item in Model.UserRoles.Items)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.RoleId</td>
+                                    <td>@item.UserId</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning">Edit</a>
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               data-details="User Role details"
+                                               class="btn btn-sm btn-info">Details</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    No records found.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <partial name="_Pager" model="Model.UserRoles" />
+
+        </div>
+    </div>
+
+</div>

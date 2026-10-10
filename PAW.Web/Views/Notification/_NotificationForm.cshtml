@@ -1,0 +1,26 @@
+@model PAW.Models.DTO.NotificationDTO
+
+@* Campos compartidos por Create y Edit *@
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="UserId" class="form-label"></label>
+        <input asp-for="UserId" type="number" step="1" class="form-control" />
+        <span asp-validation-for="UserId" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Message" class="form-label"></label>
+        <textarea asp-for="Message" rows="3" class="form-control"></textarea>
+        <span asp-validation-for="Message" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check mb-2">
+            <input asp-for="IsRead" class="form-check-input" />
+            <label asp-for="IsRead" class="form-check-label"></label>
+        </div>
+    </div>
+</div>

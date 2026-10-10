@@ -1,0 +1,13 @@
+@model PAW.Models.DTO.RoleDTO
+
+@* Campos compartidos por Create y Edit *@
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="RoleName" class="form-label"></label>
+        <input asp-for="RoleName" class="form-control" />
+        <span asp-validation-for="RoleName" class="text-danger small"></span>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+@model PAW.Models.DTO.UserActionDTO
+
+@* Partial reutilizable: detalle de acción de usuario.
+   La usan el modal de Details y la pantalla de Delete. *@
+
+<dl class="row mb-0">
+    <dt class="col-5">ID</dt>
+    <dd class="col-7">@Model.Id</dd>
+    <dt class="col-5">Name</dt>
+    <dd class="col-7">@Model.Name</dd>
+    <dt class="col-5">Description</dt>
+    <dd class="col-7">@Model.Description</dd>
+</dl>

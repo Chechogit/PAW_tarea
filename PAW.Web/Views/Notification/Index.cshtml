@@ -1,0 +1,90 @@
+@model NotificationViewModel
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container mt-4">
+
+    @await Html.PartialAsync("ExchangeRate", Model.TipoCambio)
+
+    @if (TempData["Success"] is string success)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @success
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Notifications</h2>
+
+        <a asp-action="Create" class="btn btn-primary">
+            Add Notification
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Message</th>
+                            <th>Read</th>
+                            <th>Created At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model.Notifications.Items.Any())
+                        {
+                            foreach (var item in Model.Notifications.Items)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UserId</td>
+                                    <td>@item.Message</td>
+                                    <td><span class="badge @(item.IsRead ? "bg-success" : "bg-secondary")">@(item.IsRead ? "Yes" : "No")</span></td>
+                                    <td>@item.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-warning">Edit</a>
+                                            <a asp-action="Details" asp-route-id="@item.Id"
+                                               data-details="Notification details"
+                                               class="btn btn-sm btn-info">Details</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id"
+                                               class="btn btn-sm btn-danger">Delete</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    No records found.
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <partial name="_Pager" model="Model.Notifications" />
+
+        </div>
+    </div>
+
+</div>

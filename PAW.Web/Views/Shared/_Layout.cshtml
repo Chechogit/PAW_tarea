@@ -25,11 +25,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Product</a>
+                        @* Menú con acceso a las 11 entidades, agrupadas en dos listas desplegables *@
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="menuCatalog" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Catalog</a>
+                            <ul class="dropdown-menu" aria-labelledby="menuCatalog">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index">Products</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">Categories</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Inventory" asp-action="Index">Inventory</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Supplier" asp-action="Index">Suppliers</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Component" asp-action="Index">Components</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Category</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="menuAdmin" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">Administration</a>
+                            <ul class="dropdown-menu" aria-labelledby="menuAdmin">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Users</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Role" asp-action="Index">Roles</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="UserRole" asp-action="Index">User Roles</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="UserAction" asp-action="Index">User Actions</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Notification" asp-action="Index">Notifications</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="PawTask" asp-action="Index">Tasks</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

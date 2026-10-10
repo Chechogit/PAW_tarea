@@ -1,0 +1,17 @@
+@model PAW.Models.DTO.NotificationDTO
+
+@* Partial reutilizable: detalle de notificación.
+   La usan el modal de Details y la pantalla de Delete. *@
+
+<dl class="row mb-0">
+    <dt class="col-5">ID</dt>
+    <dd class="col-7">@Model.Id</dd>
+    <dt class="col-5">User ID</dt>
+    <dd class="col-7">@Model.UserId</dd>
+    <dt class="col-5">Message</dt>
+    <dd class="col-7">@Model.Message</dd>
+    <dt class="col-5">Read</dt>
+    <dd class="col-7">@(Model.IsRead ? "Yes" : "No")</dd>
+    <dt class="col-5">Created At</dt>
+    <dd class="col-7">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</dd>
+</dl>
