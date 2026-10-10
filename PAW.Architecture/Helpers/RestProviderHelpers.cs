@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Text.Json;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace APW.Architecture.Helpers;
@@ -33,8 +34,24 @@ internal static class RestProviderHelpers
         var content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
-            var message = string.IsNullOrWhiteSpace(content) ? response.ReasonPhrase : content.Trim('"');
-            throw new HttpRequestException(message, null, response.StatusCode);
+            throw new HttpRequestException(ReadErrorMessage(content, response), null, response.StatusCode);
+        }
+        return content;
+    }
+
+    /// <summary>
+    /// When the API does BadRequest("text"), the text arrives as a JSON string: with quotes
+    /// and with accents escaped (categor\u00eda). Deserializing it gives back the clean text.
+    /// </summary>
+    private static string? ReadErrorMessage(string content, HttpResponseMessage response)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+            return response.ReasonPhrase;
+
+        if (content.StartsWith('"'))
+        {
+            try { return JsonSerializer.Deserialize<string>(content); }
+            catch (JsonException) { }
         }
         return content;
     }
