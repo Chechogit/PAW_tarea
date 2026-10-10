@@ -32,6 +32,16 @@ namespace PAW.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            return PartialView("_ProductDetails", product);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View(new ProductDTO());

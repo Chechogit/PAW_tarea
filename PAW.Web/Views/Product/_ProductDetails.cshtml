@@ -1,0 +1,74 @@
+﻿@model PAW.Models.DTO.ProductDTO
+
+<h4 class="mb-1">@Model.Name</h4>
+<p class="text-muted mb-3">@Model.Description</p>
+
+<dl class="row">
+    <dt class="col-sm-3">Product ID</dt>
+    <dd class="col-sm-9">@Model.ProductId</dd>
+
+    <dt class="col-sm-3">Rating</dt>
+    <dd class="col-sm-9">
+        @for (int i = 1; i <= 5; i++)
+        {
+            <span class="@(i <= Model.Rating ? "text-warning" : "text-muted")">@(i <= Model.Rating ? "★" : "☆")</span>
+        }
+        <span class="ms-1">@Model.Rating</span>
+    </dd>
+
+    <dt class="col-sm-3">Created by</dt>
+    <dd class="col-sm-9">@Model.CreatedBy</dd>
+
+    <dt class="col-sm-3">Modified</dt>
+    <dd class="col-sm-9">@Model.ModifiedDate.ToString("yyyy-MM-dd HH:mm") @Model.ModifiedBy</dd>
+</dl>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">Category</div>
+            <div class="card-body">
+                @if (Model.Category is not null)
+                {
+                    <partial name="_CategoryDetails" model="Model.Category" />
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No category assigned.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">Inventory</div>
+            <div class="card-body">
+                @if (Model.Inventory is not null)
+                {
+                    <partial name="_InventoryDetails" model="Model.Inventory" />
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No inventory assigned.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">Supplier</div>
+            <div class="card-body">
+                @if (Model.Supplier is not null)
+                {
+                    <partial name="_SupplierDetails" model="Model.Supplier" />
+                }
+                else
+                {
+                    <p class="text-muted mb-0">No supplier assigned.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

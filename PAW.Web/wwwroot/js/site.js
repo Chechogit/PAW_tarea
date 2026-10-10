@@ -22,3 +22,26 @@ function getExchangeRate() {
         })
         .catch((error) => console.error(error));
 }
+
+document.addEventListener("click", async function (event) {
+    const link = event.target.closest("a[data-details]");
+    if (!link) return;
+
+    event.preventDefault();   // no navegar a otra pantalla
+
+    const modalElement = document.getElementById("detailsModal");
+    const title = document.getElementById("detailsModalLabel");
+    const body = document.getElementById("detailsModalBody");
+
+    title.textContent = link.dataset.details || "Details";
+    body.innerHTML = '<div class="text-center py-5"><div class="spinner-border" role="status"></div></div>';
+    bootstrap.Modal.getOrCreateInstance(modalElement).show();
+
+    try {
+        const response = await fetch(link.href);
+        if (!response.ok) throw new Error(response.status);
+        body.innerHTML = await response.text();
+    } catch (error) {
+        body.innerHTML = '<div class="alert alert-danger mb-0">The details could not be loaded.</div>';
+    }
+});

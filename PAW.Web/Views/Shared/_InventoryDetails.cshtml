@@ -1,0 +1,21 @@
+﻿@model PAW.Models.DTO.InventoryDTO
+
+<dl class="row mb-0">
+    <dt class="col-5">ID</dt>
+    <dd class="col-7">@Model.InventoryId</dd>
+
+    <dt class="col-5">Unit price</dt>
+    <dd class="col-7">@Model.UnitPrice?.ToString("N2")</dd>
+
+    <dt class="col-5">In stock</dt>
+    <dd class="col-7">@Model.UnitsInStock</dd>
+
+    <dt class="col-5">Product ID</dt>
+    <dd class="col-7">@Model.ProductId</dd>
+
+    <dt class="col-5">Date added</dt>
+    <dd class="col-7">@Model.DateAdded?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+    <dt class="col-5">Last updated</dt>
+    <dd class="col-7">@Model.LastUpdated?.ToString("yyyy-MM-dd HH:mm") @Model.ModifiedBy</dd>
+</dl>
