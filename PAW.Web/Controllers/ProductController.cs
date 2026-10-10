@@ -30,8 +30,16 @@ namespace PAW.Web.Controllers
             };
             return View(viewModel);
         }
-
         [HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            return PartialView("_ProductDetails", product);
+        }
         public IActionResult Create()
         {
             return View(new ProductDTO());
@@ -84,6 +92,39 @@ namespace PAW.Web.Controllers
             catch (ApplicationException ex)
             {
                 _logger.LogError(ex, "Error updating product {Id}", product.ProductId);
+                ModelState.AddModelError(string.Empty, GetApiMessage(ex));
+                return View(product);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                await _productService.DeleteProductAsync(id);
+                TempData["Success"] = $"Product #{id} was deleted.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogError(ex, "Error deleting product {Id}", id);
+
+                var product = await _productService.GetProductAsync(id);
+                if (product is null)
+                    return RedirectToAction(nameof(Index));
+
                 ModelState.AddModelError(string.Empty, GetApiMessage(ex));
                 return View(product);
             }

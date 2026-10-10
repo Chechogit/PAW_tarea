@@ -1,0 +1,15 @@
+﻿@model PAW.Models.DTO.CategoryDTO
+
+<dl class="row mb-0">
+    <dt class="col-5">ID</dt>
+    <dd class="col-7">@Model.CategoryId</dd>
+
+    <dt class="col-5">Name</dt>
+    <dd class="col-7">@Model.CategoryName</dd>
+
+    <dt class="col-5">Description</dt>
+    <dd class="col-7">@Model.Description</dd>
+
+    <dt class="col-5">Modified</dt>
+    <dd class="col-7">@Model.LastModified?.ToString("yyyy-MM-dd HH:mm") @Model.ModifiedBy</dd>
+</dl>
