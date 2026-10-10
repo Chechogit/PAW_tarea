@@ -2,7 +2,7 @@
 using PAW.Models;
 //using PawTask = PAW.Models.PawTask;
 
-namespace PAW.DataAccess.MSSQL; 
+namespace PAW.DataAccess.MSSQL;
 
 public partial class ProductDbContext : DbContext
 {
@@ -230,7 +230,7 @@ public partial class ProductDbContext : DbContext
         modelBuilder.Entity<PawTask>(entity =>
         {
             entity.ToTable("Tasks");
-            entity.HasKey(e => e.Id).HasName("PK_Tasks_3214EC07FEFEEFF5");
+            entity.HasKey(e => e.Id).HasName("PK__Tasks__3214EC07FEFEEFF5");
 
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(1000);
