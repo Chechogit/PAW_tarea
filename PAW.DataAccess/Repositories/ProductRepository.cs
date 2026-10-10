@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;    
+﻿using Microsoft.EntityFrameworkCore;
 using PAW.DataAccess.MSSQL;
 using PAW.Models;
 using PAW.Repositories;

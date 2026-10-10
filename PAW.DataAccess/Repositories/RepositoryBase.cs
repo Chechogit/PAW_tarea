@@ -14,7 +14,7 @@ public interface IRepositoryBase<T>
     Task<bool> DeleteAsync(T entity);
     Task<IEnumerable<T>> ReadAsync();
 
-    // Devuelve T? porque si no lo encuentra retorna null.
+
     Task<T?> FindAsync(object id);
 
     Task<bool> UpdateAsync(T entity);
@@ -28,8 +28,10 @@ public interface IRepositoryBase<T>
 /// <typeparam name="T">Entity type.</typeparam>
 public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
+
     protected ProductDbContext DbContext { get; }
     protected DbSet<T> DbSet { get; }
+
 
     protected RepositoryBase(ProductDbContext context)
     {
@@ -107,6 +109,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
             throw new PAWException(ex);
         }
     }
+
 
     public virtual async Task<T?> FindAsync(object id)
     {

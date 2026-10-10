@@ -20,7 +20,7 @@ namespace PAW.API.Controllers
         {
             var product = await productRepository.FindAsync(id);
             if (product is null)
-                return NotFound();      
+                return NotFound();
 
             return ProductDTO.ConvertFrom(product);
         }
@@ -29,7 +29,7 @@ namespace PAW.API.Controllers
         public async Task<ActionResult<ProductDTO>> Create([FromBody] ProductDTO productDTO)
         {
             var product = ProductDTO.ConvertTo(productDTO);
-            product.ProductId = 0;                         
+            product.ProductId = 0;
             product.LastModified = DateTime.Now;
 
             try
@@ -57,7 +57,7 @@ namespace PAW.API.Controllers
                 return NotFound();
 
             var product = ProductDTO.ConvertTo(productDTO);
-            product.CreatedBy = existing.CreatedBy;        
+            product.CreatedBy = existing.CreatedBy;
             product.LastModified = DateTime.Now;
 
             try
@@ -70,7 +70,7 @@ namespace PAW.API.Controllers
                 return BadRequest("No se pudo actualizar el producto. Verifique que la categoría, el inventario y el proveedor existan.");
             }
 
-            return NoContent();   
+            return NoContent();
         }
 
         [HttpDelete("{id:int}")]

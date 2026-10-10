@@ -8,7 +8,6 @@ public interface ICategoryRepository : IRepositoryBase<Category>
 {
 }
 
-public class CategoryRepository(ProductDbContext context)
-    : RepositoryBase<Category>(context), ICategoryRepository
+public class CategoryRepository(ProductDbContext context) : RepositoryBase<Category>(context), ICategoryRepository
 {
 }

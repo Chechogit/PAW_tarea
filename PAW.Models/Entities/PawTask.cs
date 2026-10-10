@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PAW.Models;
+﻿namespace PAW.Models;
 
 public partial class PawTask
 {
