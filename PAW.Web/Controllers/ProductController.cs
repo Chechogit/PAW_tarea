@@ -1,8 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using PAW.Models.DTO;
 using PAW.Web.Models;
 using PAW.Web.Services;
+using System.Diagnostics;
 
 namespace PAW.Web.Controllers
 {
@@ -72,9 +72,43 @@ namespace PAW.Web.Controllers
             return View(product);
         }
 
-        // POST: /Product/Edit/5  -> recibe el formulario editado
-        // [FromForm]: el producto se arma SOLO con los campos del formulario.
-        // Sin esto, el "5" de la URL (id) se intentaría meter en ProductDTO.Id (un Guid) y fallaría la validación.
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new ProductDTO());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromForm] ProductDTO product)
+        {
+            if (!ModelState.IsValid)
+                return View(product);
+
+            try
+            {
+                var created = await _productService.CreateProductAsync(product);
+                TempData["Success"] = $"Product \"{created.Name}\" was created.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException ex)
+            {
+                _logger.LogError(ex, "Error creating product");
+                ModelState.AddModelError(string.Empty, GetApiMessage(ex));
+                return View(product);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productService.GetProductAsync(id);
+            if (product is null)
+                return NotFound();
+
+            return View(product);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromForm] ProductDTO product)
@@ -101,8 +135,6 @@ namespace PAW.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        // El RestProvider envuelve el error del API: el mensaje real viene en InnerException
         private static string GetApiMessage(ApplicationException ex)
             => ex.InnerException?.Message ?? ex.Message;
     }

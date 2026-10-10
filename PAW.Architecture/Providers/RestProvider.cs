@@ -2,9 +2,6 @@
 
 namespace APW.Architecture;
 
-/// <summary>
-/// Interface defining methods for RESTful operations.
-/// </summary>
 public interface IRestProvider
 {
     Task<string> DeleteAsync(string endpoint, string id);
@@ -13,9 +10,6 @@ public interface IRestProvider
     Task<string> PutAsync(string endpoint, string id, string content);
 }
 
-/// <summary>
-/// Implementation of the IRestProvider interface, providing methods for RESTful operations.
-/// </summary>
 public class RestProvider : IRestProvider
 {
     public async Task<string> GetAsync(string endpoint, string? id)
@@ -23,7 +17,7 @@ public class RestProvider : IRestProvider
         try
         {
             var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-                .GetAsync(RestProviderHelpers.BuildUrl(endpoint, id));        // CAMBIO
+                .GetAsync(RestProviderHelpers.BuildUrl(endpoint, id));
             return await RestProviderHelpers.GetResponse(response);
         }
         catch (Exception ex)
@@ -51,7 +45,7 @@ public class RestProvider : IRestProvider
         try
         {
             var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-                .PutAsync(RestProviderHelpers.BuildUrl(endpoint, id),          // CAMBIO
+                .PutAsync(RestProviderHelpers.BuildUrl(endpoint, id),
                           RestProviderHelpers.CreateContent(content));
             return await RestProviderHelpers.GetResponse(response);
         }
@@ -66,7 +60,7 @@ public class RestProvider : IRestProvider
         try
         {
             var response = await RestProviderHelpers.CreateHttpClient(endpoint)
-                .DeleteAsync(RestProviderHelpers.BuildUrl(endpoint, id));      // CAMBIO
+                .DeleteAsync(RestProviderHelpers.BuildUrl(endpoint, id));
             return await RestProviderHelpers.GetResponse(response);
         }
         catch (Exception ex)
